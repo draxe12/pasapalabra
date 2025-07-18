@@ -311,7 +311,7 @@ body {
     border: 2px solid #ffffff;
     border-radius: 50%;
     display: flex;
-    justify-content: center;
+    justify-content: center; 
     align-items: center;
     color: white;
     font-weight: bold;
