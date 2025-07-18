@@ -209,11 +209,13 @@ document.addEventListener('DOMContentLoaded', () => {
         customizeModal.style.display = 'flex';
         // Asegurarse de que el modal se puede desplazar si es necesario
         document.body.style.overflow = 'hidden'; // Evitar scroll del body cuando el modal está abierto
+        document.documentElement.style.overflow = 'hidden'; // ¡NUEVA LÍNEA CLAVE!
     }
 
     function closeCustomizeModal() {
         customizeModal.style.display = 'none';
         document.body.style.overflow = ''; // Restaurar scroll del body
+        document.documentElement.style.overflow = ''; // ¡NUEVA LÍNEA CLAVE!
     }
 
     function saveSettings() {
