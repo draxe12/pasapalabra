@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasapalabra Interactivo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="rosco-container" id="rosco">
+            <div class="inner-content">
+                <div class="pasapalabra-title" id="game-title">Pasapalabra</div> <div class="timer" id="timer">02:30</div>
+                <button id="toggle-timer-button" class="game-button">Game Start</button>
+                <button id="customize-button" class="game-button customize-button">Personalizar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="customize-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-modal-button">&times;</span>
+            <h2>Personalizar Juego</h2>
+
+            <div class="form-group">
+                <label for="game-title-input">Título del Juego</label> <input type="text" id="game-title-input" placeholder="Ej: Pasapalabra, Poke Quiz, Quiz">
+            </div>
+
+            <div class="form-group">
+                <label for="letters-input">Elementos del Rosco (uno por línea: Carácter,Pregunta,Respuesta)</label>
+                <textarea id="letters-input" rows="10" placeholder="Ejemplo:
+A,Animal doméstico que maúlla,Gato
+B,Recipiente para beber,Botella
+..."></textarea>
+                <small>Formato: Carácter,Pregunta,Respuesta</small>
+            </div>
+
+            <div class="form-group">
+                <label for="timer-input">Tiempo del Timer (en segundos)</label>
+                <input type="number" id="timer-input" min="10" value="150">
+            </div>
+
+            <div class="modal-buttons">
+                <button id="save-settings-button" class="game-button">Guardar y Reiniciar</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="restart-game-button" class="game-button restart-button" style="display:none;">Reiniciar Juego</button>
+
+    <script src="script.js"></script>
+</body>
+</html>

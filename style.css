@@ -1,0 +1,468 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* ¡Esencial para no scrolls! */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #2c3e50;
+}
+
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.rosco-container {
+    position: relative;
+    width: 90vmin;
+    height: 90vmin;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inner-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 50%; /* Puedes ajustar este tamaño */
+    height: 50%; /* Puedes ajustar este tamaño */
+}
+
+.pasapalabra-title {
+    color: white;
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    white-space: nowrap;
+}
+
+.timer {
+    color: white;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    background-color: rgba(0,0,0,0.3);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.game-button {
+    background-color: #2980b9;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-top: 10px; /* Espacio entre botones si hay varios */
+    transition: background-color 0.3s ease;
+}
+
+.game-button:hover {
+    background-color: #3498db;
+}
+
+/* Nuevo estilo para el botón personalizar si quieres un color diferente */
+.customize-button {
+    background-color: #f39c12; /* Naranja */
+}
+.customize-button:hover {
+    background-color: #e67e22; /* Naranja más oscuro */
+}
+
+
+.letter {
+    width: 8vmin;
+    height: 8vmin;
+    max-width: 60px;
+    max-height: 60px;
+    background-color: #3498db;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 3vmin;
+    max-font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    transition: background-color 0.3s ease;
+}
+
+.letter.correct {
+    background-color: #2ecc71;
+    border-color: #27ae60;
+}
+
+.letter.incorrect {
+    background-color: #e74c3c;
+    border-color: #c0392b;
+}
+
+
+/* --- Estilos del Modal --- */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Cubre toda la pantalla */
+    z-index: 1000; /* Asegura que esté por encima de todo */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Permite scroll si el contenido es muy grande */
+    background-color: rgba(0,0,0,0.7); /* Fondo oscuro semi-transparente */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #34495e; /* Color de fondo del modal */
+    margin: 5% auto; /* Margen para centrar verticalmente, auto para centrar horizontalmente */
+    padding: 30px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 80%; /* Ancho del modal */
+    max-width: 600px; /* Ancho máximo */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #ecf0f1;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group textarea,
+.form-group input[type="number"] {
+    width: calc(100% - 20px); /* Ajusta por padding */
+    padding: 10px;
+    margin: 0; /* Asegura que no haya márgenes internos */
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: #2c3e50; /* Fondo de los campos */
+    color: white;
+    font-size: 1em;
+    box-sizing: border-box; /* Importante para que padding se incluya en el width */
+    resize: vertical; /* Permite redimensionar el textarea verticalmente */
+}
+
+.form-group small {
+    margin-top: 5px;
+    font-size: 0.85em;
+    color: #bdc3c7;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+    margin-top: 20px;
+}
+
+/* Estilo para los botones dentro del modal */
+.modal-buttons .game-button {
+    margin-left: 10px; /* Espacio entre botones */
+    background-color: #27ae60; /* Verde para guardar */
+}
+.modal-buttons .game-button:hover {
+    background-color: #2ecc71;
+}html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #2c3e50;
+    position: relative; /* Para posicionar el botón de reinicio */
+}
+
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.rosco-container {
+    position: relative;
+    width: 90vmin;
+    height: 90vmin;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inner-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+    height: 50%;
+}
+
+.pasapalabra-title {
+    color: white;
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Añade un poco de sombra para que destaque */
+}
+
+.timer {
+    color: white;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    background-color: rgba(0,0,0,0.3);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.game-button {
+    background-color: #2980b9;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.game-button:hover {
+    background-color: #3498db;
+}
+
+.customize-button {
+    background-color: #f39c12;
+}
+.customize-button:hover {
+    background-color: #e67e22;
+}
+
+.letter {
+    width: 8vmin;
+    height: 8vmin;
+    max-width: 160px;
+    max-height: 160px;
+    background-color: #3498db;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 3vmin;
+    max-font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    transition: background-color 0.3s ease;
+}
+
+.letter.correct {
+    background-color: #2ecc71;
+    border-color: #27ae60;
+}
+
+.letter.incorrect {
+    background-color: #e74c3c;
+    border-color: #c0392b;
+}
+
+
+/* --- Estilos del Modal --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #34495e;
+    margin: 5% auto;
+    padding: 30px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #ecf0f1;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group textarea,
+.form-group input[type="number"],
+.form-group input[type="text"] { /* Añadimos input[type="text"] */
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 0;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: #2c3e50;
+    color: white;
+    font-size: 1em;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.form-group small {
+    margin-top: 5px;
+    font-size: 0.85em;
+    color: #bdc3c7;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.modal-buttons .game-button {
+    margin-left: 10px;
+    background-color: #27ae60;
+}
+.modal-buttons .game-button:hover {
+    background-color: #2ecc71;
+}
+
+/* --- Estilos para el botón de Reiniciar Juego --- */
+.restart-button {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e67e22; /* Naranja más oscuro para destacar */
+    color: white; /* Asegurar que el texto sea blanco */
+    padding: 15px 30px;
+    font-size: 1.5em;
+    z-index: 900;
+    animation: fadeIn 0.5s ease-out;
+    border: none; /* Eliminar borde si lo deseas */
+    border-radius: 8px; /* Añadir un poco de radio para que coincida con otros botones */
+    cursor: pointer; /* Indicar que es clickeable */
+}
+
+.restart-button:hover {
+    background-color: #d35400; /* Un naranja aún más oscuro al pasar el ratón */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* --- Nuevo estilo para las letras "Pasadas" --- */
+.letter.pased {
+    background-color: #f1c40f; /* Amarillo */
+    border-color: #f39c12; /* Un tono de amarillo más oscuro para el borde */
+    color: #333; /* Color de texto oscuro para contraste con el amarillo */
+}
