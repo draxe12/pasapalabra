@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveSettingsButton = document.getElementById('save-settings-button');
     const restartGameButton = document.getElementById('restart-game-button'); // Nuevo: Botón de reiniciar
 
+    const toggleGameButton = document.getElementById('toggle-game-button');
+    const moveGameButton = document.getElementById('move-game-button');
+    const gameContainer = document.querySelector('.game-container');
+    const innerContent = document.querySelector('.inner-content');
+
     // --- VARIABLES GLOBALES DE CONFIGURACIÓN ---
     let currentLetters = [];
     let initialTimeInSeconds = 300;
@@ -23,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let isTimerRunning = false;
     let gameStarted = false; // Indica si el juego ha sido iniciado (Game Start)
     let gameOver = false; // Indica si el juego ha terminado por tiempo
+    let innerContentShowed = true; 
+    let gameContainerMoved = false; 
 
     // --- Funciones de Juego ---
 
@@ -139,14 +146,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!gameStarted) {
             gameStarted = true;
-            toggleTimerButton.textContent = 'Pause Game';
+            toggleTimerButton.textContent = 'Pausar';
             startTimer();
         } else if (isTimerRunning) {
             pauseTimer();
-            toggleTimerButton.textContent = 'Resume Game';
+            toggleTimerButton.textContent = 'Reanudar';
         } else {
             startTimer();
-            toggleTimerButton.textContent = 'Pause Game';
+            toggleTimerButton.textContent = 'Pausar';
         }
     }
 
@@ -182,9 +189,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTimerDisplay();
         gameStarted = false;
         gameOver = false; // Resetear el estado de "Game Over"
-        toggleTimerButton.textContent = 'Game Start';
+        toggleTimerButton.textContent = 'Comenzar';
         toggleTimerButton.disabled = false;
-        restartGameButton.style.display = 'none'; // Ocultar el botón de reiniciar
+        //restartGameButton.style.display = 'none'; // Ocultar el botón de reiniciar
 
         roscoContainer.querySelectorAll('.letter').forEach(letter => {
             letter.classList.remove('correct', 'incorrect');
@@ -197,6 +204,28 @@ document.addEventListener('DOMContentLoaded', () => {
         // Puedes mostrar estadísticas o un mensaje más elaborado aquí.
     }
 
+    function toogleInnerContent() {
+        if (innerContentShowed) {
+            innerContent.style.display = "none"
+            toggleGameButton.querySelector('span').textContent = 'visibility'
+            innerContentShowed = false;
+        } else {
+            innerContent.style.display = "flex"
+            toggleGameButton.querySelector('span').textContent = 'visibility_off'
+            innerContentShowed = true;
+        }
+    }
+    function moveInnerContent() {
+        if (gameContainerMoved) {
+            roscoContainer.appendChild(innerContent)
+            moveGameButton.querySelector('span').textContent = 'right_panel_close'
+            gameContainerMoved = false;
+        } else {
+            gameContainer.appendChild(innerContent)
+            moveGameButton.querySelector('span').textContent = 'bottom_panel_close'
+            gameContainerMoved = true;
+        }
+    }
 
     // --- Funciones del Modal de Personalización ---
 
@@ -308,6 +337,9 @@ document.addEventListener('DOMContentLoaded', () => {
     closeModalButton.addEventListener('click', closeCustomizeModal);
     saveSettingsButton.addEventListener('click', saveSettings);
     restartGameButton.addEventListener('click', resetGame); // Event listener para el botón de reiniciar
+    toggleGameButton.addEventListener('click', toogleInnerContent);
+    moveGameButton.addEventListener('click', moveInnerContent);
+/*     document.window.addEventListener('resize', moveInnerContent); */
 
     // Cerrar el modal al hacer clic fuera de su contenido
     window.addEventListener('click', (event) => {

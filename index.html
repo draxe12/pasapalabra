@@ -7,22 +7,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=settings" /> -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
         <div class="rosco-container" id="rosco">
             <div class="inner-content">
-                <div class="pasapalabra-title" id="game-title">Pasapalabra</div> <div class="timer" id="timer">02:30</div>
-                <button id="toggle-timer-button" class="game-button">Game Start</button>
-                <button id="customize-button" class="game-button customize-button">Personalizar</button>
+                <div class="pasapalabra-title" id="game-title">Pasapalabra</div> <div class="timer" id="timer">05:00</div>
+                <button id="toggle-timer-button" class="game-button">Comenzar</button>
+                <button id="restart-game-button" class="game-button restart-button">Reiniciar</button>
             </div>
         </div>
     </div>
 
     <div id="customize-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button" id="close-modal-button">&times;</span>
+            <!-- <span class="close-button" id="close-modal-button">&times;</span> -->
+            <span class="close-button material-symbols-outlined" id="close-modal-button">close</span>
             <h2>Personalizar</h2>
 
             <div class="form-group">
@@ -31,7 +35,7 @@
 
             <div class="form-group">
                 <label for="letters-input">Elementos del Rosco (Uno por línea)</label>
-                <textarea id="letters-input" rows="5" placeholder="Ejemplo:
+                <textarea id="letters-input" rows="6" placeholder="Ejemplo:
 A,Animal doméstico que maúlla,Gato
 B,Recipiente para beber,Botella
 ..."></textarea>
@@ -49,7 +53,18 @@ B,Recipiente para beber,Botella
         </div>
     </div>
 
-    <button id="restart-game-button" class="game-button restart-button" style="display:none;">Reiniciar Juego</button>
+    <!-- <button id="restart-game-button" class="game-button restart-button" style="display:none;">Reiniciar Juego</button> -->
+    <div class="custom-buttons">
+        <button id="move-game-button" class="game-button move-button">
+            <span class="icon-dark material-symbols-outlined">right_panel_close</span>
+        </button>
+        <button id="toggle-game-button" class="game-button toggle-button">
+            <span class="icon-dark material-symbols-outlined">visibility_off</span>
+        </button>
+        <button id="customize-button" class="game-button customize-button">
+            <span class="icon-dark material-symbols-outlined">settings</span>
+        </button>
+    </div>
 
     <script src="script.js"></script>
 </body>

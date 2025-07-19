@@ -15,9 +15,10 @@ body {
 }
 
 .game-container {
-    width: 100dvw;
+    width: 90dvw;
     height: 100dvh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     position: relative;
@@ -73,17 +74,11 @@ body {
     font-size: 3vmin;
     margin-top: 2vmin;
     transition: background-color 0.3s ease;
+    user-select: none;
 }
 
 .game-button:hover {
     background-color: #3498db;
-}
-
-.customize-button {
-    background-color: #f39c12;
-}
-.customize-button:hover {
-    background-color: #e67e22;
 }
 
 .letter {
@@ -104,6 +99,7 @@ body {
     cursor: pointer;
     position: absolute;
     transition: background-color 0.3s ease;
+    user-select: none;
 }
 
 .letter.correct {
@@ -116,6 +112,12 @@ body {
     border-color: #c0392b;
 }
 
+/* --- Nuevo estilo para las letras "Pasadas" --- */
+.letter.pased {
+    background-color: #f1c40f; /* Amarillo */
+    border-color: #f39c12; /* Un tono de amarillo más oscuro para el borde */
+    color: #333; /* Color de texto oscuro para contraste con el amarillo */
+}
 
 /* --- Estilos del Modal --- */
 .modal {
@@ -175,7 +177,7 @@ body {
     color: #ecf0f1;
     text-align: center;
     margin-bottom: 3vmin;
-    font-size: 5vmin;
+    font-size: 4vmin;
 }
 
 .form-group {
@@ -235,16 +237,16 @@ body {
 
 /* --- Estilos para el botón de Reiniciar Juego --- */
 .restart-button {
-    position: absolute;
+    /* position: absolute;
     bottom: 3vmin;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%); */
     background-color: #e67e22; /* Naranja más oscuro para destacar */
     color: white; /* Asegurar que el texto sea blanco */
     padding: 2vmin 4vmin;
     font-size: 3vmin;
-    z-index: 900;
-    animation: fadeIn 0.5s ease-out;
+    /* z-index: 900;
+    animation: fadeIn 0.5s ease-out; */
     border: none; /* Eliminar borde si lo deseas */
     border-radius: 2vmin; /* Añadir un poco de radio para que coincida con otros botones */
     cursor: pointer; /* Indicar que es clickeable */
@@ -259,9 +261,70 @@ body {
     to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* --- Nuevo estilo para las letras "Pasadas" --- */
-.letter.pased {
-    background-color: #f1c40f; /* Amarillo */
-    border-color: #f39c12; /* Un tono de amarillo más oscuro para el borde */
-    color: #333; /* Color de texto oscuro para contraste con el amarillo */
+.move-button {
+    display: none;
 }
+
+.customize-button, .toggle-button {
+    display: flex;
+}
+/* .customize-button {
+    background-color: #f39c12;
+}
+.customize-button:hover {
+    background-color: #e67e22;
+} */
+
+.customize-button, .toggle-button, .move-button {
+    background-color: #e67e22; /* Naranja más oscuro para destacar */
+    width: 4vmin;
+    height: 4vmin;
+    padding: 4vmin;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+}
+
+.customize-button:hover, .toggle-button:hover, .move-button:hover {
+    background-color: #d35400; /* Un naranja aún más oscuro al pasar el ratón */
+}
+
+.custom-buttons {
+    position: absolute;
+    bottom: 3vmin;
+    right: 3vmin;
+    display: flex;
+    flex-direction: column;
+    z-index: 900;
+}
+
+.icon-dark {
+  font-size: 3vmin;
+  color: #333;
+}
+
+/* Extra small devices (phones, 600px and down) */
+/* @media only screen and (max-width: 600px) {...} */
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+/* @media only screen and (min-width: 600px) {...} */
+
+/* Medium devices (landscape tablets, 768px and up) */
+/* @media only screen and (min-width: 768px) {
+    .game-container {
+        flex-direction: row;
+    }
+} */
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 768px) {
+    .game-container {
+        flex-direction: row;
+    }
+    .move-button {
+        display: flex;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+/* @media only screen and (min-width: 1200px) {...} */
