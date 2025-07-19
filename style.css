@@ -49,6 +49,7 @@ body {
     color: white;
     font-size: 8vmin;
     font-weight: bold;
+    margin: 0;
     margin-bottom: 2vmin;
     white-space: nowrap;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Añade un poco de sombra para que destaque */
