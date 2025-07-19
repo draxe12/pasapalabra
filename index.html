@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pasapalabra Interactivo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,15 +23,15 @@
     <div id="customize-modal" class="modal">
         <div class="modal-content">
             <span class="close-button" id="close-modal-button">&times;</span>
-            <h2>Personalizar Juego</h2>
+            <h2>Personalizar</h2>
 
             <div class="form-group">
-                <label for="game-title-input">Título del Juego</label> <input type="text" id="game-title-input" placeholder="Ej: Pasapalabra, Poke Quiz, Quiz">
+                <label for="game-title-input">Título</label> <input type="text" id="game-title-input" placeholder="Ej: Pasapalabra, Poke Quiz, Quiz">
             </div>
 
             <div class="form-group">
-                <label for="letters-input">Elementos del Rosco (Uno por línea: Carácter,Pregunta,Respuesta)</label>
-                <textarea id="letters-input" rows="10" placeholder="Ejemplo:
+                <label for="letters-input">Elementos del Rosco (Uno por línea)</label>
+                <textarea id="letters-input" rows="5" placeholder="Ejemplo:
 A,Animal doméstico que maúlla,Gato
 B,Recipiente para beber,Botella
 ..."></textarea>
@@ -36,7 +39,7 @@ B,Recipiente para beber,Botella
             </div>
 
             <div class="form-group">
-                <label for="timer-input">Tiempo del Timer (en segundos)</label>
+                <label for="timer-input">Tiempo (En segundos)</label>
                 <input type="number" id="timer-input" min="10" value="150">
             </div>
 

@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- VARIABLES GLOBALES DE CONFIGURACIÓN ---
     let currentLetters = [];
-    let initialTimeInSeconds = 150;
+    let initialTimeInSeconds = 300;
     let gameTitle = 'Pasapalabra'; // Nuevo: Variable para el título del juego
 
     let numLetters;
@@ -35,17 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
             console.warn('No hay elementos definidos para el rosco. Usando el alfabeto por defecto.');
             // Puedes cargar un set de letras por defecto si el usuario no introduce nada
             currentLetters = [
-                { char: 'A', question: 'Con la A: Animal doméstico que maúlla.', answer: 'Gato' },
+                { char: 'A', question: 'Con la A: Animal doméstico que rebuzna.', answer: 'Asno' },
                 { char: 'B', question: 'Con la B: Recipiente para beber.', answer: 'Botella' },
                 { char: 'C', question: 'Con la C: Elemento químico.', answer: 'Cobre' },
                 { char: 'D', question: 'Con la D: Herramienta.', answer: 'Taladro' },
-                { char: 'E', question: 'Con la E: Color.', answer: 'Verde' },
+                { char: 'E', question: 'Con la E: Animal muy pesado.', answer: 'Elefante' },
                 { char: 'F', question: 'Con la F: Estación.', answer: 'Otoño' },
                 { char: 'G', question: 'Con la G: Cereal.', answer: 'Arroz' },
                 { char: 'H', question: 'Con la H: Sinónimo de hogar.', answer: 'Casa' },
                 { char: 'I', question: 'Con la I: Instrumento musical de cuerda.', answer: 'Guitarra' },
                 { char: 'J', question: 'Con la J: Pieza de vestir de tela vaquera.', answer: 'Jeans' },
-                { char: 'K', question: 'With K: A common fruit.', answer: 'Kiwi' },
+                { char: 'K', question: 'Con la K: Fruta común.', answer: 'Kiwi' },
                 { char: 'L', question: 'Con la L: Sinónimo de veloz.', answer: 'Rápido' },
                 { char: 'M', question: 'Con la M: Nombre de un mes de primavera.', answer: 'Mayo' },
                 { char: 'N', question: 'Con la N: Número impar que sigue al ocho.', answer: 'Nueve' },
@@ -58,10 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 { char: 'T', question: 'Con la T: Vehículo de transporte público de pasajeros.', answer: 'Tren' },
                 { char: 'U', question: 'Con la U: Fruta pequeña, redonda y dulce, que crece en racimos.', answer: 'Uva' },
                 { char: 'V', question: 'Con la V: Nombre de un sentido.', answer: 'Vista' },
-                { char: 'W', question: 'With W: A type of animal.', answer: 'Wolf' },
-                { char: 'X', question: 'With X: Musical instrument.', answer: 'Xylophone' },
-                { char: 'Y', question: 'With Y: A color.', answer: 'Yellow' },
-                { char: 'Z', question: 'With Z: An animal with stripes.', answer: 'Zebra' }
+                { char: 'W', question: 'Con la W: Lobo en inglés.', answer: 'Wolf' },
+                { char: 'X', question: 'Con la X: Instrumento musical.', answer: 'Xilófono' },
+                { char: 'Y', question: 'Con la Y: Amarillo en inglés.', answer: 'Yellow' },
+                { char: 'Z', question: 'Con la Z: Cebra en inglés', answer: 'Zebra' }
             ];
         }
 
