@@ -19,7 +19,7 @@
             <div class="inner-content">
                 <h1 class="pasapalabra-title" id="game-title">Pasapalabra</h1>
                 <div class="timer" id="timer">05:00</div>
-                <button id="toggle-timer-button" class="game-button">Comenzar</button>
+                <button id="toggle-timer-button" class="game-button start-button">Comenzar</button>
                 <button id="restart-game-button" class="game-button restart-button">Reiniciar</button>
             </div>
         </div>
@@ -28,7 +28,7 @@
     <div id="customize-modal" class="modal">
         <div class="modal-content">
             <!-- <span class="close-button" id="close-modal-button">&times;</span> -->
-            <span class="close-button material-symbols-outlined" id="close-modal-button">close</span>
+            <!-- <span class="close-button material-symbols-outlined" id="close-modal-button">close</span> -->
             <h2>Personalizar</h2>
 
             <div class="form-group">
@@ -36,12 +36,9 @@
             </div>
 
             <div class="form-group">
-                <label for="letters-input">Elementos del Rosco (Uno por línea)</label>
-                <textarea id="letters-input" rows="6" placeholder="Ejemplo:
-A,Animal doméstico que maúlla,Gato
-B,Recipiente para beber,Botella
-..."></textarea>
-                <small>Formato: Carácter,Pregunta,Respuesta</small>
+                <label for="letters-input">Elementos del Rosco (Separado por comas o saltos de línea)</label>
+                <textarea id="letters-input" rows="2" placeholder="A,B,C,..."></textarea>
+                <!-- <small>Formato: Carácter,Pregunta,Respuesta</small> -->
             </div>
 
             <div class="form-group">
@@ -50,21 +47,22 @@ B,Recipiente para beber,Botella
             </div>
 
             <div class="modal-buttons">
-                <button id="save-settings-button" class="game-button">Guardar y Reiniciar</button>
+                <button id="close-modal-button" class="game-button second-outlined-color">Cancelar</button>
+                <button id="save-settings-button" class="game-button second-filled-color">Guardar</button>
             </div>
         </div>
     </div>
 
     <!-- <button id="restart-game-button" class="game-button restart-button" style="display:none;">Reiniciar Juego</button> -->
     <div class="custom-buttons">
-        <button id="move-game-button" class="game-button move-button">
+        <button id="customize-button" class="game-button rounded second-filled-color">
+            <span class="icon-dark material-symbols-outlined">settings</span>
+        </button>
+        <button id="move-button" class="game-button rounded second-filled-color">
             <span class="icon-dark material-symbols-outlined">right_panel_close</span>
         </button>
-        <button id="toggle-game-button" class="game-button toggle-button">
+        <button id="toggle-button" class="game-button rounded second-filled-color">
             <span class="icon-dark material-symbols-outlined">visibility_off</span>
-        </button>
-        <button id="customize-button" class="game-button customize-button">
-            <span class="icon-dark material-symbols-outlined">settings</span>
         </button>
     </div>
 

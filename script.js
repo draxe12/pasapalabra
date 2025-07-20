@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveSettingsButton = document.getElementById('save-settings-button');
     const restartGameButton = document.getElementById('restart-game-button'); // Nuevo: Botón de reiniciar
 
-    const toggleGameButton = document.getElementById('toggle-game-button');
-    const moveGameButton = document.getElementById('move-game-button');
+    const toggleGameButton = document.getElementById('toggle-button');
+    const moveGameButton = document.getElementById('move-button');
     const gameContainer = document.querySelector('.game-container');
     const innerContent = document.querySelector('.inner-content');
 
@@ -192,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleTimerButton.textContent = 'Comenzar';
         toggleTimerButton.disabled = false;
         //restartGameButton.style.display = 'none'; // Ocultar el botón de reiniciar
+        //toogleInnerContent(true)
 
         roscoContainer.querySelectorAll('.letter').forEach(letter => {
             letter.classList.remove('correct', 'incorrect');
@@ -205,14 +206,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function toogleInnerContent() {
-        if (innerContentShowed) {
-            innerContent.style.display = "none"
-            toggleGameButton.querySelector('span').textContent = 'visibility'
-            innerContentShowed = false;
-        } else {
+        if (!innerContentShowed) {
             innerContent.style.display = "flex"
+            moveGameButton.style.display = "flex"
+            customizeButton.style.display = "flex"
             toggleGameButton.querySelector('span').textContent = 'visibility_off'
             innerContentShowed = true;
+        } else {
+            innerContent.style.display = "none"
+            moveGameButton.style.display = "none"
+            customizeButton.style.display = "none"
+            toggleGameButton.querySelector('span').textContent = 'visibility'
+            innerContentShowed = false;
         }
     }
     function moveInnerContent() {
@@ -226,13 +231,22 @@ document.addEventListener('DOMContentLoaded', () => {
             gameContainerMoved = true;
         }
     }
+    function removerEspacios(array) {
+    return array.filter(elemento => {
+        if (typeof elemento === 'string') {
+        return elemento.trim() !== '';
+        }
+        return true; // Mantener elementos que no son strings
+    });
+    }
 
     // --- Funciones del Modal de Personalización ---
 
     function openCustomizeModal() {
         // Rellenar los campos con la configuración actual
         gameTitleInput.value = gameTitle; // Rellenar el título actual
-        lettersInput.value = currentLetters.map(item => `${item.char},${item.question},${item.answer}`).join('\n');
+        /* lettersInput.value = currentLetters.map(item => `${item.char},${item.question},${item.answer}`).join('\n'); */
+        lettersInput.value = currentLetters.map(item => `${item.char}`).join(',');
         timerInput.value = initialTimeInSeconds;
 
         customizeModal.style.display = 'flex';
@@ -261,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const newLettersText = lettersInput.value.trim();
         const parsedLetters = [];
         if (newLettersText) {
-            newLettersText.split('\n').forEach(line => {
+            /* newLettersText.split('\n').forEach(line => {
                 const parts = line.split(',');
                 if (parts.length >= 3) {
                     const char = parts[0].trim();
@@ -275,7 +289,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     const char = parts[0].trim();
                     parsedLetters.push({ char, question: `Con ${char}: Sin pregunta definida.`, answer: 'N/A' });
                 }
-            });
+            }); */
+            newLettersText.split(/[,|\r\n]+/).filter(Boolean).forEach(item => {
+                const char = item.trim()
+                parsedLetters.push({ char, question: `Con ${char}: Sin pregunta definida.`, answer: 'N/A' })
+            })
         }
 
         if (parsedLetters.length > 0) {
@@ -347,6 +365,19 @@ document.addEventListener('DOMContentLoaded', () => {
             closeCustomizeModal();
         }
     });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && customizeModal.style.display === 'flex') { // O como verifiques si tu modal está abierto
+            closeCustomizeModal();
+        }
+    });
+
+    /* Removido por que tengo un text area y el salto de linea con el enter provoca incongruencias */
+    /* document.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && customizeModal.style.display === 'flex') { // O como verifiques si tu modal está abierto
+            saveSettings()
+        }
+    }); */
 
     createRosco(); // Crea el rosco inicial
 
