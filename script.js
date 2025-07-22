@@ -31,6 +31,31 @@ document.addEventListener('DOMContentLoaded', () => {
     let innerContentShowed = true; 
     let gameContainerMoved = false; 
 
+    let estadoJuegoTest = {
+        currentLetters: [
+            { char: 'A', state: 'sin-responder', anwsered: null },
+            { char: 'B', state: 'sin-responder', anwsered: null },
+            { char: 'C', state: 'sin-responder', anwsered: null }
+            // Aquí irían todas tus 27 letras con su estado inicial
+        ],
+        tiempoRestante: initialTimeInSeconds,
+        aciertos: 0,
+        fallos: 0
+    };
+
+    let estadoJuego = { 
+        gameTitle: gameTitle,
+        initialTimeInSeconds: initialTimeInSeconds,
+        currentLetters: currentLetters.map(objeto => ({
+            ...objeto,
+            state: '',
+            anwsered: ''
+        })),
+        tiempoRestante: initialTimeInSeconds,
+        aciertos: 0,
+        fallos: 0
+    }
+    
     // --- Funciones de Juego ---
 
     function createRosco() {
@@ -106,37 +131,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleLetterClick(letterElement) {
-    if (!gameStarted || gameOver) {
-        console.log("El juego no ha empezado o ya terminó.");
-        return;
+        if (!gameStarted || gameOver) {
+            console.log("El juego no ha empezado o ya terminó.");
+            return;
+        }
+
+        const char = letterElement.dataset.char;
+        const question = letterElement.dataset.question;
+
+        console.log(`Pregunta para ${char}: ${question}`);
+
+        if (letterElement.classList.contains('correct')) {
+            letterElement.classList.remove('correct');
+            letterElement.classList.add('incorrect');
+        } else if (letterElement.classList.contains('incorrect')) {
+            letterElement.classList.remove('incorrect');
+            letterElement.classList.add('passed'); // Tercer clic: Pasa la letra
+        } else if (letterElement.classList.contains('passed')) {
+            letterElement.classList.remove('passed'); // Cuarto clic: Vuelve al estado por defecto
+            // O podrías decidir que "pasado" es un estado final
+        } else {
+            letterElement.classList.add('correct'); // Primer clic: se marca como correcta
+        }
+
+        console.log(`marcarLetra para ${letterElement}: ${getStatusClass(letterElement)}`);
+        marcarLetra(char, getStatusClass(letterElement))
     }
 
-    const char = letterElement.dataset.char;
-    const question = letterElement.dataset.question;
+    function getStatusClass(element) {
+        const classes = element.classList; // Get all classes as a DOMTokenList
+        const possibleStatusClasses = ['correct', 'incorrect', 'passed'];
 
-    console.log(`Pregunta para ${char}: ${question}`);
+        for (const className of classes) {
+            if (className !== 'letter' && possibleStatusClasses.includes(className)) {
+            return className; // Found the status class
+            }
+        }
 
-    if (letterElement.classList.contains('correct')) {
-        letterElement.classList.remove('correct');
-        letterElement.classList.add('incorrect');
-    } else if (letterElement.classList.contains('incorrect')) {
-        letterElement.classList.remove('incorrect');
-        letterElement.classList.add('pased'); // Tercer clic: Pasa la letra
-    } else if (letterElement.classList.contains('pased')) {
-        letterElement.classList.remove('pased'); // Cuarto clic: Vuelve al estado por defecto
-        // O podrías decidir que "pasado" es un estado final
-    } else {
-        letterElement.classList.add('correct'); // Primer clic: se marca como correcta
+        // If we reach here, no 'correct', 'incorrect', or 'passed' class was found
+        return '';
     }
-}
 
     // --- Timer y Control del Juego ---
 
-    function updateTimerDisplay() {
+    /* function updateTimerDisplay() {
         const minutes = Math.floor(timeRemaining / 60);
         const seconds = timeRemaining % 60;
         timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }
+    } */
+
+    function updateTimerDisplay() {
+    // Calcula las horas restantes
+    const hours = Math.floor(timeRemaining / 3600); // 1 hora = 3600 segundos
+
+    // Calcula los minutos restantes después de restar las horas
+    const minutes = Math.floor((timeRemaining % 3600) / 60);
+
+    // Calcula los segundos restantes después de restar horas y minutos
+    const seconds = timeRemaining % 60;
+
+    // Formatea la salida para incluir horas, minutos y segundos
+    // padStart(2, '0') asegura que siempre tenga dos dígitos (ej. 05 en lugar de 5)
+    timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
 
     function toggleTimer() {
         if (gameOver) { // Si el juego ya terminó, no se puede iniciar/pausar
@@ -155,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             startTimer();
             toggleTimerButton.textContent = 'Pausar';
         }
-    }
+}
 
     function startTimer() {
         if (timerInterval) clearInterval(timerInterval);
@@ -173,6 +230,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartGameButton.style.display = 'block'; // Muestra el botón de reiniciar
                 //endGame();
             }
+             estadoJuego = { 
+                ...estadoJuego,
+                tiempoRestante: timeRemaining,
+            }
+            guardarConfiguracion()
         }, 1000);
         isTimerRunning = true;
     }
@@ -197,7 +259,23 @@ document.addEventListener('DOMContentLoaded', () => {
         roscoContainer.querySelectorAll('.letter').forEach(letter => {
             letter.classList.remove('correct', 'incorrect');
         });
+
+        estadoJuego = {
+            ...estadoJuego,
+            currentLetters: currentLetters.map(objeto => ({
+                ...objeto,
+                state: '',
+                anwsered: ''
+            })),
+            tiempoRestante: initialTimeInSeconds,
+            aciertos: 0,
+            fallos:0
+        }
+        guardarConfiguracion()
+
         createRosco(); // Recrear el rosco con las letras actuales
+
+        cargarConfiguracion()
     }
 
     function endGame() {
@@ -231,14 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
             gameContainerMoved = true;
         }
     }
-    function removerEspacios(array) {
-    return array.filter(elemento => {
-        if (typeof elemento === 'string') {
-        return elemento.trim() !== '';
-        }
-        return true; // Mantener elementos que no son strings
-    });
-    }
 
     // --- Funciones del Modal de Personalización ---
 
@@ -259,6 +329,103 @@ document.addEventListener('DOMContentLoaded', () => {
         customizeModal.style.display = 'none';
         document.body.style.overflow = ''; // Restaurar scroll del body
         document.documentElement.style.overflow = ''; // ¡NUEVA LÍNEA CLAVE!
+    }
+
+    function marcarLetra(letra, nuevoEstado) {
+        const index = estadoJuego.currentLetters.findIndex(l => l.char === letra);
+        if (index !== -1) {
+            estadoJuego.currentLetters[index].state = nuevoEstado;
+            /* if (nuevoEstado === 'correct') estadoJuego.aciertos++;
+            if (nuevoEstado === 'incorrect') estadoJuego.fallos++; */
+            estadoJuego.aciertos = 0;
+            estadoJuego.fallos = 0;
+            estadoJuego.currentLetters.forEach(letter => {
+                if (letter.state === 'correct') {
+                    estadoJuego.aciertos++;
+                } else if (letter.state === 'incorrect') {
+                    estadoJuego.fallos++;
+                }
+                // No hacemos nada si el estado es 'pased' o cualquier otro, según tu requerimiento
+            });
+            estadoJuego.tiempoRestante = timeRemaining;
+            
+            /* estadoJuego = { 
+                ...estadoJuego,
+                currentLetters: currentLetters.map(objeto => ({
+                    ...objeto,
+                    state: currentLettersnuevoEstado,
+                    anwsered: ''
+                })),
+                tiempoRestante: initialTimeInSeconds - timeRemaining,
+                aciertos: 0,
+                fallos: 0,
+            } */
+            
+            actualizarUIConEstado(estadoJuego); // Actualiza la UI inmediatamente
+            guardarConfiguracion(); // Guarda el estado después de cada cambio
+            console.log('marcarLetra', estadoJuego)
+        }
+    }
+    
+    function guardarConfiguracion() {     
+        // Convierte tu objeto de estado del juego a una cadena JSON
+        const estadoJuegoJSON = JSON.stringify(estadoJuego);
+
+        // Guarda la cadena JSON en localStorage bajo una clave específica
+        // La clave 'pasapalabra_config' es un ejemplo, puedes usar la que quieras
+        localStorage.setItem('pasapalabra_config', estadoJuegoJSON);
+
+        console.log('Configuración guardada en localStorage.');
+    }
+
+    function cargarConfiguracion() {
+        // Intenta obtener la cadena JSON del localStorage
+        const estadoGuardadoJSON = localStorage.getItem('pasapalabra_config');
+
+        if (estadoGuardadoJSON) {
+            try {
+                // Si hay datos, conviértelos de nuevo a un objeto JavaScript
+                estadoJuego = JSON.parse(estadoGuardadoJSON);
+                console.log('Configuración cargada de localStorage:', estadoJuego);
+
+                // Ahora, debes usar este 'estadoJuego' cargado para actualizar la UI de tu rosco
+                // Por ejemplo, recorrer el array 'estadoJuego.letras' y aplicar los colores
+                // y estados guardados a tus elementos HTML del rosco.
+                actualizarUIConEstado(estadoJuego); // Función que tendrás que crear/adaptar
+                return true; // Indica que se cargó algo
+            } catch (e) {
+                console.error('Error al parsear el JSON de la configuración guardada:', e);
+                return false;
+            }
+        } else {
+            console.log('No se encontró configuración guardada en localStorage.');
+            return false; // Indica que no había nada que cargar
+        }
+    }
+
+    // Ejemplo de cómo podría ser 'actualizarUIConEstado'
+    function actualizarUIConEstado(estado) {
+        estado.currentLetters.forEach((item, index) => {
+            const elementoLetra = document.getElementById(`letter-${item.char.toLowerCase().replace(/[^a-z0-9]/g, '')}-${index}`); // Asume IDs como 'letra-A-0', 'letra-B-1'
+            if (elementoLetra && item.state !== '') {
+                // Elimina clases de estado previas y añade la nueva
+                elementoLetra.classList.remove('correct', 'incorrect', 'passed');
+                elementoLetra.classList.add(item.state);
+
+                // Puedes también mostrar la respuesta si es relevante
+                // elementoLetra.textContent = item.respondida || item.letra;
+                //console.log(elementoLetra, item.state)
+            }
+        });
+        // Actualizar el tiempo, aciertos, fallos en la UI
+        // document.getElementById('tiempo').textContent = estado.tiempoRestante;
+        // document.getElementById('aciertos').textContent = estado.aciertos;
+        // document.getElementById('fallos').textContent = estado.fallos;
+        gameTitle = estado.gameTitle;
+        gameTitleDisplay.textContent = estado.gameTitle;
+        initialTimeInSeconds = estado.initialTimeInSeconds;
+        timeRemaining = estadoJuego.tiempoRestante;
+        updateTimerDisplay();
     }
 
     function saveSettings() {
@@ -304,12 +471,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 3. Guardar el tiempo del timer
         const newTime = parseInt(timerInput.value, 10);
-        if (!isNaN(newTime) && newTime > 0) {
+        if (!isNaN(newTime) && newTime > 0 && newTime < 360000) {
             initialTimeInSeconds = newTime;
         } else {
-            alert('El tiempo del timer es inválido (debe ser un número mayor a 0). Usando la configuración actual.');
+            alert('El tiempo del timer es inválido (debe ser un número mayor a 0 y menor a 360000). Usando la configuración actual.');
         }
 
+        estadoJuego = { 
+            ...estadoJuego,
+            gameTitle: gameTitle,
+            initialTimeInSeconds: initialTimeInSeconds,
+            currentLetters: currentLetters.map(objeto => ({
+                ...objeto,
+                state: '',
+                anwsered: ''
+            })),
+        }
+
+        guardarConfiguracion();
         closeCustomizeModal();
         resetGame(); // Reiniciar el juego con la nueva configuración
     }
@@ -317,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Inicialización y Event Listeners ---
 
     // Establecer las letras iniciales y el título (si no hay personalización guardada)
-    currentLetters = [
+    /* currentLetters = [
         { char: 'A', question: 'Con la A: Animal doméstico que maúlla.', answer: 'Gato' },
         { char: 'B', question: 'Con la B: Recipiente para beber.', answer: 'Botella' },
         { char: 'C', question: 'Con la C: Elemento químico, metal plateado, dúctil y maleable.', answer: 'Cobre' },
@@ -347,8 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { char: 'Z', question: 'With Z: An animal with stripes.', answer: 'Zebra' }
     ];
     gameTitleDisplay.textContent = gameTitle; // Asegurar que el título inicial se muestre
-
-    updateTimerDisplay(); // Mostrar el tiempo inicial al cargar
+    updateTimerDisplay(); // Mostrar el tiempo inicial al cargar */
 
     toggleTimerButton.addEventListener('click', toggleTimer);
     customizeButton.addEventListener('click', openCustomizeModal);
@@ -380,6 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }); */
 
     createRosco(); // Crea el rosco inicial
+    cargarConfiguracion();
 
     // Recalcular el rosco si la ventana cambia de tamaño
     let resizeTimeout;
@@ -387,6 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
             createRosco();
+            cargarConfiguracion();
         }, 250);
     });
 });

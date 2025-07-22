@@ -32,18 +32,19 @@
             <h2>Personalizar</h2>
 
             <div class="form-group">
-                <label for="game-title-input">Título</label> <input type="text" id="game-title-input" placeholder="Ej: Pasapalabra, Poke Quiz, Quiz">
+                <label for="game-title-input">Título (Máx. 15 caracteres)</label> 
+                <input type="text" id="game-title-input" maxlength="15" placeholder="Ej: Pasapalabra, Poke Quiz, Quiz"/>
             </div>
 
             <div class="form-group">
                 <label for="letters-input">Elementos del Rosco (Separado por comas o saltos de línea)</label>
-                <textarea id="letters-input" rows="2" placeholder="A,B,C,..."></textarea>
+                <textarea id="letters-input" rows="3" placeholder="A,B,C,..."></textarea>
                 <!-- <small>Formato: Carácter,Pregunta,Respuesta</small> -->
             </div>
 
             <div class="form-group">
                 <label for="timer-input">Tiempo (En segundos)</label>
-                <input type="number" id="timer-input" min="10" value="150">
+                <input type="number" id="timer-input" min="10" max="360000" value="300">
             </div>
 
             <div class="modal-buttons">

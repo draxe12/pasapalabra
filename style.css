@@ -125,7 +125,7 @@ body {
 }
 
 /* --- Nuevo estilo para las letras "Pasadas" --- */
-.letter.pased {
+.letter.passed {
     background-color: #f1c40f; /* Amarillo */
     border-color: #f39c12; /* Un tono de amarillo más oscuro para el borde */
     color: #333; /* Color de texto oscuro para contraste con el amarillo */
@@ -290,11 +290,13 @@ body {
 
 .second-outlined-color {
     border: 1px solid #e67e22;
+    color: #e67e22;
     background-color: transparent;
 }
 
 .second-outlined-color:hover {
     border: 1px solid #d35400;
+    color: #d35400;
     background-color: transparent;
 }
 
