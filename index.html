@@ -35,15 +35,22 @@
             <!-- <span class="close-button material-symbols-outlined" id="close-modal-button">close</span> -->
             <h2>Personalizar</h2>
 
-            <div class="row">
+            <div class="form-row">
                 <div class="form-group">
                     <label for="game-title-input">Título (Máx. 15 caracteres)</label> 
                     <input type="text" id="game-title-input" maxlength="15" placeholder="Ej: Pasapalabra, Poke Quiz, Quiz"/>
                 </div>
 
                 <div class="form-group">
-                    <label for="timer-input">Tiempo (En segundos)</label>
-                    <input type="number" id="timer-input" min="10" max="360000" value="300">
+                    <label for="minutos-select">Tiempo (Minutos y segundos)</label>
+                    <div class="form-row">
+                        <div class="select-wrapper">
+                            <select id="minutos-select" aria-label="Seleccionar minutos"></select>
+                        </div>
+                        <div class="select-wrapper">
+                            <select id="segundos-select" aria-label="Seleccionar segundos"></select>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -54,6 +61,11 @@
             </div>
 
             
+
+            <!-- <div class="form-group">
+                <label for="timer-input">Tiempo (En segundos)</label>
+                <input type="number" id="timer-input" min="10" max="360000" value="300">
+            </div> -->
 
             <div class="modal-buttons">
                 <button id="close-modal-button" class="game-button second-outlined-color">Cancelar</button>

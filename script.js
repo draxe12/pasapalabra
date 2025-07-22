@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalButton = document.getElementById('close-modal-button');
     const gameTitleInput = document.getElementById('game-title-input'); // Nuevo: Input del título en el modal
     const lettersInput = document.getElementById('letters-input');
-    const timerInput = document.getElementById('timer-input');
+    //const timerInput = document.getElementById('timer-input');
     const saveSettingsButton = document.getElementById('save-settings-button');
     const restartGameButton = document.getElementById('restart-game-button'); // Nuevo: Botón de reiniciar
     const successText = document.getElementById('success-text'); 
@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const moveGameButton = document.getElementById('move-button');
     const gameContainer = document.querySelector('.game-container');
     const innerContent = document.querySelector('.inner-content');
+
+    const minutosInput = document.getElementById('minutos-select');
+    const segundosInput = document.getElementById('segundos-select');
 
     // --- VARIABLES GLOBALES DE CONFIGURACIÓN ---
     let currentLetters = [];
@@ -208,26 +211,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Timer y Control del Juego ---
 
-    /* function updateTimerDisplay() {
+    function updateTimerDisplay() {
         const minutes = Math.floor(timeRemaining / 60);
         const seconds = timeRemaining % 60;
         timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    /* function updateTimerDisplay() {
+        // Calcula las horas restantes
+        const hours = Math.floor(timeRemaining / 3600); // 1 hora = 3600 segundos
+
+        // Calcula los minutos restantes después de restar las horas
+        const minutes = Math.floor((timeRemaining % 3600) / 60);
+
+        // Calcula los segundos restantes después de restar horas y minutos
+        const seconds = timeRemaining % 60;
+
+        // Formatea la salida para incluir horas, minutos y segundos
+        // padStart(2, '0') asegura que siempre tenga dos dígitos (ej. 05 en lugar de 5)
+        timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     } */
-
-    function updateTimerDisplay() {
-    // Calcula las horas restantes
-    const hours = Math.floor(timeRemaining / 3600); // 1 hora = 3600 segundos
-
-    // Calcula los minutos restantes después de restar las horas
-    const minutes = Math.floor((timeRemaining % 3600) / 60);
-
-    // Calcula los segundos restantes después de restar horas y minutos
-    const seconds = timeRemaining % 60;
-
-    // Formatea la salida para incluir horas, minutos y segundos
-    // padStart(2, '0') asegura que siempre tenga dos dígitos (ej. 05 en lugar de 5)
-    timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-}
 
     function toggleTimer() {
         if (gameOver) { // Si el juego ya terminó, no se puede iniciar/pausar
@@ -372,7 +375,9 @@ document.addEventListener('DOMContentLoaded', () => {
         gameTitleInput.value = gameTitle; // Rellenar el título actual
         /* lettersInput.value = currentLetters.map(item => `${item.char},${item.question},${item.answer}`).join('\n'); */
         lettersInput.value = currentLetters.map(item => `${item.char}`).join(',');
-        timerInput.value = initialTimeInSeconds;
+        //timerInput.value = initialTimeInSeconds;
+        minutosInput.value = Math.floor(initialTimeInSeconds / 60);
+        segundosInput.value = initialTimeInSeconds % 60;
 
         customizeModal.style.display = 'flex';
         // Asegurarse de que el modal se puede desplazar si es necesario
@@ -481,6 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initialTimeInSeconds = estado.initialTimeInSeconds;
         timeRemaining = estadoJuego.tiempoRestante;
         updateTimerDisplay();
+        //cargarTiempoSeleccionado();
         successText.textContent = `Aciertos: ${estadoJuego.aciertos}`;
         failureText.textContent = `Fallos: ${estadoJuego.fallos}`;
         toggleTimerButton.textContent = (estado.textTimerButton === 'Pausar' && !isTimerRunning) ? 'Reanudar' : estadoJuego.textTimerButton;
@@ -529,11 +535,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 3. Guardar el tiempo del timer
-        const newTime = parseInt(timerInput.value, 10);
+        /* const newTime = parseInt(timerInput.value, 10);
         if (!isNaN(newTime) && newTime > 0 && newTime < 360000) {
             initialTimeInSeconds = newTime;
         } else {
             alert('El tiempo del timer es inválido (debe ser un número mayor a 0 y menor a 360000). Usando la configuración actual.');
+        } */
+
+        const newTime = (parseInt(minutosInput.value, 10) * 60) + parseInt(segundosInput.value, 10);
+        if (!isNaN(newTime) && newTime > 0) {
+            initialTimeInSeconds = newTime;
+        } else {
+            alert('El tiempo del timer es inválido (debe ser un número mayor a 0). Usando la configuración actual.');
         }
 
         estadoJuego = { 
@@ -550,6 +563,36 @@ document.addEventListener('DOMContentLoaded', () => {
         guardarConfiguracion();
         closeCustomizeModal();
         resetGame(); // Reiniciar el juego con la nueva configuración
+    }
+
+    // Función para generar opciones de 00 a 59 (para segundos) o hasta un límite (para minutos)
+    function generarOpciones(selectElementId, maxVal) {
+        const select = document.getElementById(selectElementId);
+
+        select.innerHTML = ''; 
+
+        for (let i = 0; i <= maxVal; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i.toString().padStart(2, '0'); // Formato "00", "01"
+
+            /* // ¡Aquí es donde añadimos el atributo 'selected'!
+            if (selectElementId === 'minutos-select') {
+                const minutes = Math.floor(timeRemaining / 60);
+                if (i === minutes) {
+                    option.selected = true; // Marca esta opción como seleccionada
+                }
+            }
+            // ¡Aquí es donde añadimos el atributo 'selected'!
+            if (selectElementId === 'segundos-select') {
+                const seconds = timeRemaining % 60;
+                if (i === seconds) {
+                    option.selected = true; // Marca esta opción como seleccionada
+                }
+            } */
+
+            select.appendChild(option);
+        }
     }
 
     // --- Inicialización y Event Listeners ---
@@ -586,6 +629,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     gameTitleDisplay.textContent = gameTitle; // Asegurar que el título inicial se muestre
     updateTimerDisplay(); // Mostrar el tiempo inicial al cargar */
+    generarOpciones('minutos-select', 30); // Por ejemplo, hasta 30 minutos
+    generarOpciones('segundos-select', 59); // De 00 a 59 segundos
 
     toggleTimerButton.addEventListener('click', toggleTimer);
     customizeButton.addEventListener('click', openCustomizeModal);
@@ -624,8 +669,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', () => {
         
         moveGameButton.style.display =  window.innerWidth > 768 ? 'flex' : 'none'
-        cargarConfiguracion();
         createRosco();
+        cargarConfiguracion();
 
         /* clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
