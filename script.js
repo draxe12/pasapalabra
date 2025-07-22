@@ -340,15 +340,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function toogleInnerContent() {
         if (!innerContentShowed) {
-            innerContent.style.display = "flex"
-            moveGameButton.style.display = "flex"
-            customizeButton.style.display = "flex"
+            innerContent.style.display = 'flex'
+            moveGameButton.style.display =  window.innerWidth > 768 ? 'flex' : 'none'
+            customizeButton.style.display = 'flex'
             toggleGameButton.querySelector('span').textContent = 'visibility_off'
             innerContentShowed = true;
         } else {
-            innerContent.style.display = "none"
-            moveGameButton.style.display = "none"
-            customizeButton.style.display = "none"
+            innerContent.style.display = 'none'
+            moveGameButton.style.display = 'none'
+            customizeButton.style.display = 'none'
             toggleGameButton.querySelector('span').textContent = 'visibility'
             innerContentShowed = false;
         }
@@ -622,11 +622,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Recalcular el rosco si la ventana cambia de tamaño
     let resizeTimeout;
     window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
+        
+        moveGameButton.style.display =  window.innerWidth > 768 ? 'flex' : 'none'
+        cargarConfiguracion();
+        createRosco();
+
+        /* clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
             createRosco();
-            cargarConfiguracion();
-        }, 250);
+        }, 250); */
     });
 
     window.addEventListener('storage', (event) => {

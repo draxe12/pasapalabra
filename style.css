@@ -211,7 +211,7 @@ body {
     width: 100%;
     padding: 2vmin;
     margin: 0;
-    border: 1px solid #555;
+    border: 0.25vmin solid #555;
     outline: none;
     border-radius: 2vmin;
     background-color: #34495e; /* #2c3e50 */
@@ -229,7 +229,7 @@ body {
 .form-group textarea:focus,
 .form-group input[type="number"]:focus,
 .form-group input[type="text"]:focus {
-    border: 1px solid white;
+    border-color: white;
 }
 
 .form-group small {
@@ -289,13 +289,13 @@ body {
 }
 
 .second-outlined-color {
-    border: 1px solid #e67e22;
+    border: 0.25vmin solid #e67e22;
     color: #e67e22;
     background-color: transparent;
 }
 
 .second-outlined-color:hover {
-    border: 1px solid #d35400;
+    border-color: #d35400;
     color: #d35400;
     background-color: transparent;
 }
@@ -333,6 +333,12 @@ body {
     font-size: 2.8vmin;
     font-weight: bold;
     color: white;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3vmin;
 }
 
 
