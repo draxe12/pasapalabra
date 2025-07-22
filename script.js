@@ -45,6 +45,36 @@ document.addEventListener('DOMContentLoaded', () => {
         fallos: 0
     };
 
+    currentLetters = [
+        { char: 'A', question: 'Con la A: Animal doméstico que rebuzna.', answer: 'Asno' },
+        { char: 'B', question: 'Con la B: Recipiente para beber.', answer: 'Botella' },
+        { char: 'C', question: 'Con la C: Elemento químico.', answer: 'Cobre' },
+        { char: 'D', question: 'Con la D: Herramienta.', answer: 'Taladro' },
+        { char: 'E', question: 'Con la E: Animal muy pesado.', answer: 'Elefante' },
+        { char: 'F', question: 'Con la F: Estación.', answer: 'Otoño' },
+        { char: 'G', question: 'Con la G: Cereal.', answer: 'Arroz' },
+        { char: 'H', question: 'Con la H: Sinónimo de hogar.', answer: 'Casa' },
+        { char: 'I', question: 'Con la I: Instrumento musical de cuerda.', answer: 'Guitarra' },
+        { char: 'J', question: 'Con la J: Pieza de vestir de tela vaquera.', answer: 'Jeans' },
+        { char: 'K', question: 'Con la K: Fruta común.', answer: 'Kiwi' },
+        { char: 'L', question: 'Con la L: Sinónimo de veloz.', answer: 'Rápido' },
+        { char: 'M', question: 'Con la M: Nombre de un mes de primavera.', answer: 'Mayo' },
+        { char: 'N', question: 'Con la N: Número impar que sigue al ocho.', answer: 'Nueve' },
+        { char: 'Ñ', question: 'Con la Ñ: Animal grande con cuernos que vive en la selva.', answer: 'Ñu' },
+        { char: 'O', question: 'Con la O: Planeta más cercano al sol.', answer: 'Mercurio' },
+        { char: 'P', question: 'Con la P: Líquido que beben las plantas.', answer: 'Agua' },
+        { char: 'Q', question: 'Con la Q: Utensilio de cocina para cortar.', answer: 'Cuchillo' },
+        { char: 'R', question: 'Con la R: Sinónimo de obsequio.', answer: 'Regalo' },
+        { char: 'S', question: 'Con la S: Astro que ilumina de día.', answer: 'Sol' },
+        { char: 'T', question: 'Con la T: Vehículo de transporte público de pasajeros.', answer: 'Tren' },
+        { char: 'U', question: 'Con la U: Fruta pequeña, redonda y dulce, que crece en racimos.', answer: 'Uva' },
+        { char: 'V', question: 'Con la V: Nombre de un sentido.', answer: 'Vista' },
+        { char: 'W', question: 'Con la W: Lobo en inglés.', answer: 'Wolf' },
+        { char: 'X', question: 'Con la X: Instrumento musical.', answer: 'Xilófono' },
+        { char: 'Y', question: 'Con la Y: Amarillo en inglés.', answer: 'Yellow' },
+        { char: 'Z', question: 'Con la Z: Cebra en inglés', answer: 'Zebra' }
+    ];
+
     let estadoJuego = { 
         gameTitle: gameTitle,
         initialTimeInSeconds: initialTimeInSeconds,
@@ -67,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         roscoContainer.querySelectorAll('.letter').forEach(letter => letter.remove());
 
         // Asegurarse de que tenemos letras para el rosco
-        if (currentLetters.length === 0) {
+        /* if (currentLetters.length === 0) {
             console.warn('No hay elementos definidos para el rosco. Usando el alfabeto por defecto.');
             // Puedes cargar un set de letras por defecto si el usuario no introduce nada
             currentLetters = [
@@ -99,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { char: 'Y', question: 'Con la Y: Amarillo en inglés.', answer: 'Yellow' },
                 { char: 'Z', question: 'Con la Z: Cebra en inglés', answer: 'Zebra' }
             ];
-        }
+        } */
 
         numLetters = currentLetters.length;
 
@@ -205,23 +235,29 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        let textButton = 'Comenzar'
+
         if (!gameStarted) {
             gameStarted = true;
-            toggleTimerButton.textContent = 'Pausar';
+            //toggleTimerButton.textContent = 'Pausar';
+            textButton = 'Pausar'
             startTimer();
         } else if (isTimerRunning) {
             pauseTimer();
-            toggleTimerButton.textContent = 'Reanudar';
+            //toggleTimerButton.textContent = 'Reanudar';
+            textButton = 'Reanudar'
         } else {
             startTimer();
-            toggleTimerButton.textContent = 'Pausar';
+            //toggleTimerButton.textContent = 'Pausar';
+            textButton = 'Pausar'
         }
 
         estadoJuego = {
             ...estadoJuego,
-            textTimerButton: toggleTimerButton.textContent
+            textTimerButton: textButton
         }
         guardarConfiguracion()
+        actualizarUIConEstado(estadoJuego)
 }
 
     function startTimer() {
@@ -249,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             estadoJuego = { 
                 ...estadoJuego,
-                tiempoRestante: timeRemaining,
+                tiempoRestante: timeRemaining
             }
             guardarConfiguracion()
         }, 1000);
@@ -447,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTimerDisplay();
         successText.textContent = `Aciertos: ${estadoJuego.aciertos}`;
         failureText.textContent = `Fallos: ${estadoJuego.fallos}`;
-        toggleTimerButton.textContent = estado.textTimerButton;
+        toggleTimerButton.textContent = (estado.textTimerButton === 'Pausar' && !isTimerRunning) ? 'Reanudar' : estadoJuego.textTimerButton;
         toggleTimerButton.disabled = estado.disabledTimerButton;
     }
 
