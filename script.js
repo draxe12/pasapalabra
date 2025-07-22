@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const timerInput = document.getElementById('timer-input');
     const saveSettingsButton = document.getElementById('save-settings-button');
     const restartGameButton = document.getElementById('restart-game-button'); // Nuevo: Botón de reiniciar
+    const successText = document.getElementById('success-text'); 
+    const failureText = document.getElementById('failure-text');
 
     const toggleGameButton = document.getElementById('toggle-button');
     const moveGameButton = document.getElementById('move-button');
@@ -53,7 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
         })),
         tiempoRestante: initialTimeInSeconds,
         aciertos: 0,
-        fallos: 0
+        fallos: 0,
+        textTimerButton: 'Comenzar',
+        disabledTimerButton: false
     }
     
     // --- Funciones de Juego ---
@@ -212,6 +216,12 @@ document.addEventListener('DOMContentLoaded', () => {
             startTimer();
             toggleTimerButton.textContent = 'Pausar';
         }
+
+        estadoJuego = {
+            ...estadoJuego,
+            textTimerButton: toggleTimerButton.textContent
+        }
+        guardarConfiguracion()
 }
 
     function startTimer() {
@@ -224,13 +234,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 timerInterval = null;
                 isTimerRunning = false;
                 gameOver = true; // El juego ha terminado
-                timerDisplay.textContent = '00:00'; // Asegura que muestre 00:00
+                timerDisplay.textContent = '00:00:00'; // Asegura que muestre 00:00
                 toggleTimerButton.textContent = 'Game Over';
                 toggleTimerButton.disabled = true; // Deshabilita el botón de iniciar/pausar
-                restartGameButton.style.display = 'block'; // Muestra el botón de reiniciar
+                //restartGameButton.style.display = 'block'; // Muestra el botón de reiniciar
                 //endGame();
+                estadoJuego = { 
+                    ...estadoJuego,
+                    tiempoRestante: 0,
+                    textTimerButton: 'Game Over',
+                    disabledTimerButton: true
+                }
+                guardarConfiguracion()
             }
-             estadoJuego = { 
+            estadoJuego = { 
                 ...estadoJuego,
                 tiempoRestante: timeRemaining,
             }
@@ -269,7 +286,9 @@ document.addEventListener('DOMContentLoaded', () => {
             })),
             tiempoRestante: initialTimeInSeconds,
             aciertos: 0,
-            fallos:0
+            fallos:0,
+            textTimerButton: 'Comenzar',
+            disabledTimerButton: false
         }
         guardarConfiguracion()
 
@@ -426,6 +445,10 @@ document.addEventListener('DOMContentLoaded', () => {
         initialTimeInSeconds = estado.initialTimeInSeconds;
         timeRemaining = estadoJuego.tiempoRestante;
         updateTimerDisplay();
+        successText.textContent = `Aciertos: ${estadoJuego.aciertos}`;
+        failureText.textContent = `Fallos: ${estadoJuego.fallos}`;
+        toggleTimerButton.textContent = estado.textTimerButton;
+        toggleTimerButton.disabled = estado.disabledTimerButton;
     }
 
     function saveSettings() {
@@ -569,4 +592,28 @@ document.addEventListener('DOMContentLoaded', () => {
             cargarConfiguracion();
         }, 250);
     });
+
+    window.addEventListener('storage', (event) => {
+    // Comprueba si la clave que te interesa ha cambiado
+    if (event.key === 'pasapalabra_config') {
+        console.log('Detectado cambio en localStorage:', event.newValue);
+        if (event.newValue) {
+            try {
+                // Parsear el nuevo valor y actualizar el estado de tu juego
+                const nuevoEstadoJuego = JSON.parse(event.newValue);
+                estadoJuego = nuevoEstadoJuego; // Actualiza tu variable global de estado
+                createRosco()
+                actualizarUIConEstado(estadoJuego); // Función para refrescar la interfaz
+                console.log('Estado del juego actualizado desde otra pestaña.');
+            } catch (e) {
+                console.error('Error al parsear el nuevo estado de localStorage:', e);
+            }
+        } else {
+            // El valor fue borrado (ej. localStorage.removeItem('pasapalabra_config'))
+            console.log('Configuración de Pasapalabra borrada en otra pestaña.');
+            // Puedes reiniciar el juego o mostrar un mensaje
+        }
+    }
+});
+
 });
